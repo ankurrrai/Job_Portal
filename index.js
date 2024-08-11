@@ -6,7 +6,7 @@ import cors from 'cors'
 import morgan from 'morgan';
 import { accessLogStream } from './config/logStream.js'
 import bodyParser from 'body-parser';
-
+import errorMsg from "./middlewares/errorMiddleware.js"
 
 
 // Load the dotenv config also pass the path if require like path:'./' 
@@ -20,6 +20,7 @@ app.use(bodyParser.json())
 app.use(morgan(process.env.morganFormat,{stream:accessLogStream}))
 app.use(cors()); //it is used for cross origin resource sahring. We can give the option. Also this enhance the sequirty
 app.use('/',router);
+app.use(errorMsg)
 
 
 

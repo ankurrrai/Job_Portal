@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import mongooseBcrypt from 'mongoose-bcrypt';
+import JWT from 'jsonwebtoken';
 
 const userSchema=new mongoose.Schema({
     name:{
@@ -24,7 +25,7 @@ const userSchema=new mongoose.Schema({
     }, 
     password:{
         type:String,
-        require:[true,'Password is require'],
+        required:[true,'Password is require'],
         validate: {
             validator: function (value) {
               // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character
@@ -44,6 +45,13 @@ const userSchema=new mongoose.Schema({
 },{timestamps:true})
 
 userSchema.plugin(mongooseBcrypt)
+
+// JSON WEB Token
+userSchema.methods.createJWT=function(){
+  return JWT.sign({userId:this._id},process.env.JWTScretKey,{expiresIn:'1d'})
+}
+
+
 
 const User=mongoose.model('User',userSchema)
 export default User

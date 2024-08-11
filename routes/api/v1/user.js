@@ -1,8 +1,9 @@
 import express from "express"
-import { addUser } from "../../../controllers/api/v1/userController.js"
+import { authReq } from '../../../middlewares/authMiddkeware.js'
+import { updateDetail } from "../../../controllers/api/v1/userController.js"
 const router=express.Router();
 
-router.post('/add-user',addUser)
 
+router.post('/update-details',authReq,updateDetail)
 
 export default router

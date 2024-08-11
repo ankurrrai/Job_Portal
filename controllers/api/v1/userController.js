@@ -1,28 +1,15 @@
 import User from '../../../models/users.js'
 
-export const addUser=async (req,res)=> {
+export const updateDetail=async (req,res,next) => {
     try {
-        let user=await User.findOne({email:req.body.email})
-        if (user){
-            return res.status(200).json({
-                message:{
-                    message:'User already exist!'
-                }
-                
-            })
-
-        } 
-
-        let newUser=await User.create(req.body)
+        
+        let updatedUser= await User.findOneAndUpdate({ _id: req.user.userId }, req.body)
         return res.status(200).json({
-            message:{
-                message:'User Added successfully!',
-                user:await User.findOne({email:newUser.email}).select('-password')
-            }
+            message:'User Details updated successfully!',
+            user:await User.findById(updatedUser._id).select('-password')
         })
-    } catch (err){
-        return res.status(400).json({
-            message:` ${err}`
-        })
+    } catch (error) {
+        return next(error)
     }
 }
+
